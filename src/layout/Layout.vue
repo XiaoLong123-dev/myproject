@@ -111,6 +111,7 @@ body {
   // overflow-y: scroll;
   .left {
     min-height: 760px;
+    height: 100%;
     background-color: #46a3ff;
     overflow: hidden;
     .el-menu-vertical-demo {
@@ -138,7 +139,6 @@ body {
     min-height: 700px;
     padding-left: 10px;
     overflow: hidden;
-    padding: 10px;
   }
 }
 </style>

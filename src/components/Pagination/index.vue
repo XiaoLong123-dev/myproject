@@ -2,11 +2,19 @@
   <!-- 分页器组件 -->
   <div class="pagination">
     <!-- 总数目 -->
-    <div class="total">共{{total}}条</div>
+    <div class="total">共{{ total }}条</div>
     <div class="container">
       <!-- 上一页 -->
-      <button class="pre disabled" @click="changePage(myCurrentPage-1)" v-if="myCurrentPage==1"><</button>
-      <button class="pre" @click="changePage(myCurrentPage-1)" v-else><</button>
+      <button
+        class="pre disabled"
+        @click="changePage(myCurrentPage - 1)"
+        v-if="myCurrentPage == 1"
+      >
+        &lt;
+      </button>
+      <button class="pre" @click="changePage(myCurrentPage - 1)" v-else>
+        &lt;
+      </button>
       <!-- 页码 -->
       <!-- <span>1</span>
       <span>...</span>
@@ -14,28 +22,66 @@
       <span>2</span>
       <span>...</span>
       <span>3</span> -->
-      <span v-show="startAndEndPages().start > 1" @click="changePage(1)" :class="{active:myCurrentPage==1}">1</span>
+      <span
+        v-show="startAndEndPages().start > 1"
+        @click="changePage(1)"
+        :class="{ active: myCurrentPage == 1 }"
+        >1</span
+      >
+
       <span v-show="startAndEndPages().start > 1">...</span>
+
       <!-- 注意template不能绑定key -->
-      <template v-for="(page,index) in startAndEndPages().end" >
-        <span :class="{active:myCurrentPage==page}" v-if="page>=startAndEndPages().start" :key="index" @click="changePage(page)">{{page}}</span>
+      <template v-for="(page, index) in startAndEndPages().end">
+        <span
+          :class="{ active: myCurrentPage == page }"
+          v-if="page >= startAndEndPages().start"
+          :key="index"
+          @click="changePage(page)"
+          >{{ page }}</span
+        >
       </template>
 
-       <span v-show="startAndEndPages().end<totalPage">...</span>
-      <span v-show="startAndEndPages().end<totalPage" @click="changePage(totalPage)" :class="{active:myCurrentPage==totalPage}">{{totalPage}}</span
+      <span v-show="startAndEndPages().end < totalPage">...</span>
+
+      <span
+        v-show="startAndEndPages().end < totalPage"
+        @click="changePage(totalPage)"
+        :class="{ active: myCurrentPage == totalPage }"
+        >{{ totalPage }}</span
+      >
       <!-- 下一页 -->
-      <button class="next disabled" @click="changePage(myCurrentPage+1)"  v-if="myCurrentPage==totalPage">></button>
-      <button class="next" @click="changePage(myCurrentPage+1)" v-else>></button>
+      <button
+        class="next disabled"
+        @click="changePage(myCurrentPage + 1)"
+        v-if="myCurrentPage == totalPage"
+      >
+        &gt;
+      </button>
+      <button class="next" @click="changePage(myCurrentPage + 1)" v-else>
+        &gt;
+      </button>
     </div>
     <!-- 页面尺寸 -->
     <!-- @change="selectClass($event)" -->
-    <select v-model="selectClassEnd" class="pagesize" @change="selectClass($event)">
+    <select
+      v-model.number="selectClassEnd"
+      class="pagesize"
+      @change="selectClass($event)"
+    >
+      <option value="1">1条/页</option>
+      <option value="5">5条/页</option>
       <option value="10">10条/页</option>
-      <option value="20">20条/页</option>
-      <option value="30">30条/页</option>
     </select>
     <!-- 直接前往第几页 -->
-    <div class="goPage">前往<input type="text" placeholder="1" v-model="goPage" @keyup.enter="changePage(goPage)" />页</div>
+    <div class="goPage">
+      前往<input
+        type="text"
+        placeholder="1"
+        v-model.number="goPage"
+        @keyup.enter="changePage(goPage)"
+      />页
+    </div>
   </div>
 </template>
 
@@ -53,7 +99,7 @@ export default {
     },
     pagesize: {
       type: Number,
-      default: 10,
+      default: 1,
     },
     // 连续页数
     limit: {
@@ -64,12 +110,12 @@ export default {
   data() {
     return {
       // 下拉框收集的数据
-      selectClassEnd: 10,
+      selectClassEnd: 1,
       // 去那一页
       goPage: 1,
       // 定义props的代理
       myTotal: 100,
-      myPageSize: 10,
+      myPageSize: 1,
       myCurrentPage: 1,
       myLimit: 5,
     };
@@ -77,7 +123,7 @@ export default {
   computed: {
     // 计算总页数
     totalPage() {
-      return Math.ceil(this.myTotal / this.myPageSize);
+      return Math.ceil(this.total / this.pagesize);
     },
   },
   methods: {
@@ -117,7 +163,6 @@ export default {
 
     // 改变页码
     changePage(page) {
-      console.log(page);
       if (page <= 0 || page > this.totalPage) {
         alert("页码不正确");
         return;
@@ -125,21 +170,26 @@ export default {
       if (this.myCurrentPage !== page) {
         this.myCurrentPage = page;
         // 通知父组件更改页码
+        // 整理参数
+        let pages = { page: this.myCurrentPage, pagesize: this.myPageSize };
+        this.$emit("changepages", pages);
       }
     },
 
     // 改变页面尺寸
     selectClass(e) {
       // e.target.value 是你选中的值
-      this.myPageSize = e.target.value;
+      this.myPageSize = parseInt(e.target.value);
       this.myCurrentPage = 1;
-      console.log(e.target.value);
+      // 通知父组件更改页码
+      // 通知父组件更改页码
+      // 整理参数
+      let pages = { page: this.myCurrentPage, pagesize: this.myPageSize };
+      this.$emit("changepages", pages);
+      // console.log(e.target.value);
     },
   },
-  mounted() {
-    // console.log(this.startAndEndPages());
-    // this.startAndEndPages();
-  },
+  mounted() {},
   watch: {
     props: {
       handler() {
@@ -161,16 +211,14 @@ export default {
   line-height: 30px;
   font-size: 14px;
   margin: 5px auto;
-  background-color: pink;
   display: flex;
   justify-content: space-around;
-  .total {
-  }
+
   .container {
     .pre,
     .next {
-      width: 20px;
-      height: 20px;
+      width: 25px;
+      height: 25px;
       text-align: center;
       margin: 0 10px;
     }

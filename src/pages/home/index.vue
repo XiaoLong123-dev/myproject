@@ -1,8 +1,5 @@
 <template>
-  <div>
-    Hi~
-    <Pagination></Pagination>
-  </div>
+  <div>Hi~</div>
 </template>
 
 <script>

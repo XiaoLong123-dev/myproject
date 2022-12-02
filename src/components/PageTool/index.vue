@@ -29,6 +29,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    // 控制是否显示图标
+    // showicon: {
+    //   type: Boolean,
+    //   default: false,
+    // },
   },
 };
 </script>
