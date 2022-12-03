@@ -44,6 +44,7 @@ export default {
   .before {
     padding: 0 15px;
     line-height: 34px;
+    font-size: 14px;
     // 原来是占满的
     display: inline-block;
     border-radius: 5px;

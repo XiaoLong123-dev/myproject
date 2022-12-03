@@ -16,9 +16,9 @@ import router from "./router/index";
 import store from "./store";
 // 引入权限管理
 import "@/permission.js";
+
 // 获取所有的自定义指令
 import * as directive from "@/directives/index";
-
 // 注册自定义指令
 Object.keys(directive).forEach((item) => {
   // console.log(item, directive[item]);
@@ -29,6 +29,12 @@ Object.keys(directive).forEach((item) => {
 // 引入全局自定义组件
 import Component from "@/components";
 Vue.use(Component);
+
+// 引入并注册filter
+import * as filters from "@/utils/filters";
+Object.keys(filters).forEach((item) => {
+  Vue.filter(item, filters[item]);
+});
 
 Vue.config.productionTip = false;
 

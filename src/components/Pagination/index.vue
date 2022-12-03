@@ -64,14 +64,10 @@
     </div>
     <!-- 页面尺寸 -->
     <!-- @change="selectClass($event)" -->
-    <select
-      v-model.number="selectClassEnd"
-      class="pagesize"
-      @change="selectClass($event)"
-    >
-      <option value="1">1条/页</option>
+    <select class="pagesize" @change="selectClass($event)">
+      <option value="1" selected>1条/页</option>
       <option value="5">5条/页</option>
-      <option value="10">10条/页</option>
+      <option value.number="10">10条/页</option>
     </select>
     <!-- 直接前往第几页 -->
     <div class="goPage">
