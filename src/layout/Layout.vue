@@ -3,7 +3,7 @@
     <el-row type="flex">
       <!-- 左侧导航栏 -->
       <el-col :span="part">
-        <div class="left">
+        <div class="left" v-show="!isCollapse">
           <!-- logo -->
           <img src="~@/assets/common/logo.png" alt="" srcset="" />
 
@@ -47,7 +47,9 @@
 
         <!-- 内容区域 -->
         <div class="content">
-          <router-view></router-view>
+          <transition :name="transitionName" mode="out-in">
+            <router-view></router-view>
+          </transition>
         </div> </el-col
     ></el-row>
   </div>
@@ -69,6 +71,9 @@ export default {
 
       // 所有路由表
       routes: [],
+
+      // 路由动画
+      transitionName: "slide-right",
     };
   },
 
@@ -109,11 +114,14 @@ body {
   // 超出部分滚动，但是去除滚动条
   // overflow-x: hidden;
   // overflow-y: scroll;
+
   .left {
     min-height: 760px;
     height: 100%;
     background-color: #46a3ff;
     overflow: hidden;
+    // 过度
+    // transition: all 1s;
     .el-menu-vertical-demo {
       height: 100%;
     }
@@ -123,9 +131,7 @@ body {
   }
   .right {
     position: relative;
-
     width: 100%;
-    // height: 8vh;
     background-color: #46a3ff;
     .hideOrDisplay {
       position: absolute;
@@ -139,6 +145,19 @@ body {
     min-height: 700px;
     padding-left: 10px;
     overflow: hidden;
+    // 路由切换添加动画
+    .slide-right-enter-active,
+    .slide-right-leave-active {
+      transition: all 0.5s ease;
+    }
+    .slide-right-leave-to {
+      transform: translateX(100px);
+      opacity: 0;
+    }
+    .slide-right-enter {
+      transform: translateX(-100px);
+      opacity: 0;
+    }
   }
 }
 </style>
