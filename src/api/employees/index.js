@@ -53,3 +53,16 @@ export const addEmployee = (data) => {
     data,
   });
 };
+
+/**
+ * 导入员工excel
+ * @param {*} data 数组
+ * @returns
+ */
+export const importEmployees = (data) => {
+  return request({
+    url: "/sys/user/batch",
+    method: "post",
+    data,
+  });
+};

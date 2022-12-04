@@ -4,6 +4,7 @@ Vue.use(VueRouter);
 
 const Login = () => import("@/pages/login");
 const Layout = () => import("@/layout/Layout");
+const Import = () => import("@/pages/import");
 
 // 二级路由
 const Home = () => import("@/pages/home");
@@ -49,7 +50,13 @@ export const constRoutes = [
       {
         path: "home",
         component: Home,
-        meta: { title: "主页一", icon: "el-icon-s-platform" },
+        meta: { title: "主页", icon: "el-icon-s-platform" },
+      },
+      // excel导入
+      {
+        path: "import",
+        component: Import,
+        hidden: true,
       },
     ],
   },

@@ -7,7 +7,9 @@
           <span>共{{ page.total }}条记录</span>
         </template>
         <template v-slot:after>
-          <el-button type="primary">excel导入</el-button>
+          <el-button type="primary" @click="$router.push('/import')"
+            >excel导入</el-button
+          >
           <el-button type="success">excel导出</el-button>
           <el-button type="info" @click="addemployee">新增员工</el-button>
         </template>
@@ -42,7 +44,7 @@
           </el-table-column>
           <!-- 在职状态 <el-table-column label="账户状态" sortable="" prop="enableState" /> -->
           <el-table-column label="手机" sortable="" prop="mobile" />
-          <el-table-column label="操作" sortable="" fixed="right" width="280">
+          <el-table-column label="操作" fixed="right" width="280">
             <!-- 利用作用域插槽获取用户的信息 -->
             <template slot-scope="{ row }">
               <el-button type="text" size="small">查看</el-button>
