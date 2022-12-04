@@ -67,7 +67,7 @@
     <select class="pagesize" @change="selectClass($event)">
       <option value="1" selected>1条/页</option>
       <option value="5">5条/页</option>
-      <option value.number="10">10条/页</option>
+      <option value="10">10条/页</option>
     </select>
     <!-- 直接前往第几页 -->
     <div class="goPage">
@@ -170,6 +170,7 @@ export default {
         let pages = { page: this.myCurrentPage, pagesize: this.myPageSize };
         this.$emit("changepages", pages);
       }
+      this.goPage = 1;
     },
 
     // 改变页面尺寸
@@ -177,6 +178,7 @@ export default {
       // e.target.value 是你选中的值
       this.myPageSize = parseInt(e.target.value);
       this.myCurrentPage = 1;
+      this.goPage = 1;
       // 通知父组件更改页码
       // 通知父组件更改页码
       // 整理参数

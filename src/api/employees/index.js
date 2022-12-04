@@ -21,3 +21,35 @@ export const getEmployeesList = (params) => {
     params,
   });
 };
+
+/**
+ * 根据id删除员工
+ * @param {*} id
+ * @returns
+ */
+export const delEmployees = (id) => {
+  return request({
+    url: `/sys/user/${id}`,
+    method: "delete",
+  });
+};
+
+/**
+ * 新增员工
+ * username	string	非必须		姓名	
+    mobile	string	非必须		手机号	
+    formOfEmployment	number	非必须		聘用形式	
+    workNumber	string	非必须		工号	
+    departmentName	string	非必须		组织名称	
+    timeOfEntry	string	非必须		入职时间	
+    correctionTime	string	非必须		转正时间
+ * @param {*} data
+ * @returns
+ */
+export const addEmployee = (data) => {
+  return request({
+    url: "/sys/user",
+    method: "post",
+    data,
+  });
+};
