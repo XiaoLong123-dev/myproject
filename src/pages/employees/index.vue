@@ -47,7 +47,12 @@
           <el-table-column label="操作" fixed="right" width="280">
             <!-- 利用作用域插槽获取用户的信息 -->
             <template slot-scope="{ row }">
-              <el-button type="text" size="small">查看</el-button>
+              <el-button
+                type="text"
+                size="small"
+                @click="$router.push(`/employees/${row.id}`)"
+                >查看</el-button
+              >
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>

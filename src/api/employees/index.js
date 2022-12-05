@@ -66,3 +66,15 @@ export const importEmployees = (data) => {
     data,
   });
 };
+
+/** *
+ *
+ * 保存员工新的账号密码信息
+ * **/
+export function saveUserDetailById(data) {
+  return request({
+    url: `/sys/user/${data.id}`,
+    method: "put",
+    data,
+  });
+}

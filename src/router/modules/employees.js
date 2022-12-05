@@ -20,6 +20,12 @@ export default {
         icon: "el-icon-s-platform",
       },
     },
+    //
+    {
+      path: "/employees/:id", // 动态路由参数
+      component: () => import("@/pages/employees/employeeDetail.vue"),
+      hidden: true,
+    },
   ],
 };
 // 当你的访问地址 是 /employees的时候 layout组件会显示 此时 你的二级路由的默认组件  也会显示
