@@ -10,7 +10,7 @@
           <el-button type="primary" @click="$router.push('/import')"
             >excel导入</el-button
           >
-          <el-button type="success">excel导出</el-button>
+          <el-button type="success" @click="exportdata">excel导出</el-button>
           <el-button type="info" @click="addemployee">新增员工</el-button>
         </template>
       </PageTool>
@@ -82,6 +82,8 @@
 import EmployeeEnum from "@/api/constant/employees.js";
 import { getEmployeesList, delEmployees } from "@/api/employees";
 import addEmployees from "./components/addEmployees.vue";
+// 引入时间处理函数
+import { formatDate } from "@/utils/filters";
 export default {
   components: { addEmployees },
   data() {
@@ -106,10 +108,10 @@ export default {
       let page = pages ? pages : this.page;
       this.loading = true;
       let result = await getEmployeesList(page);
-      console.log(result);
       if (result.success) {
         this.page.total = result.data.total;
         this.employeelist = result.data.rows;
+        console.log(this.employeelist);
         this.loading = false;
       }
     },
@@ -147,35 +149,143 @@ export default {
         this.page = { page: oldpage - 1, size: oldsize };
         // 有问题
         this.getEmployeesList(this.page);
-
-        // if (this.employeelist.length == 0) {
-        //   if (this.page.page !== 1) {
-        //     this.getEmployeesList({
-        //       page: this.page.page - 1,
-        //       size: this.page.size,
-        //     });
-        //   } else {
-        //     this.getEmployeesList({
-        //       page: this.page.page + 1,
-        //       size: this.page.size,
-        //     });
-        //   }
-        // } else {
-        //   this.getEmployeesList(this.page);
-        // }
       } catch (error) {
         console.log(error);
       }
     },
+
     // 新增员工
     addemployee() {
       this.isshow = true;
     },
+
     // 添加成功重新更新数据
     updateemployees() {
       this.getEmployeesList();
     },
+
+    // excel导出
+    async exportdata() {
+      // let datas = this.changeexcel();
+      // console.log(datas);
+      // console.log(this.excelheader());
+
+      // 表头的数据，决定表格的顺序
+      const headers = {
+        姓名: "username",
+        入职日期: "timeOfEntry",
+        手机号: "mobile",
+        密码: "password",
+        聘用形式: "formOfEmployment",
+        转正日期: "correctionTime",
+        工号: "workNumber",
+        部门: "departmentName",
+      };
+
+      // 调用接口获取全部的员工数据
+      let result = await getEmployeesList({ page: 1, size: this.page.total });
+      // console.log(result);
+      let datas = this.excelData(headers, result.data.rows);
+
+      // 复杂表头的导出(有两个表头)
+      // 必要参数multiHeader 复杂表头的部分，merges 需要合并的部分
+      // multiHeader [[其中有几个[]就是有几行表头],[],[]]
+      const multiHeader = [["姓名", "主要信息", "", "", "", "", "", "部门"]];
+      // merges 合并单元格
+      const merges = ["A1:A2", "B1:G1", "H1:H2"];
+
+      // 利用懒加载
+      import("@/vendor/Export2Excel.js").then((excel) => {
+        // excel 为导出的对象
+        excel.export_json_to_excel({
+          // 表头["",""]  表头必须是中文
+          // header: this.excelheader(),
+
+          header: Object.keys(headers),
+
+          // 数据，与表头对应，[[],[]]  对数据进行转化，并与表头对应
+          data: datas,
+
+          // 导出的文件名 filename
+          filename: "员工表",
+
+          // 复杂表头
+          multiHeader,
+          merges,
+        });
+      });
+    },
+
+    // // 表头的数据----用于导出excel
+    // excelheader() {
+    //   //    建立一个中英对照表
+    //   const userRelations = {
+    //     id: "id",
+    //     timeOfEntry: "入职日期",
+    //     mobile: "手机号",
+    //     username: "姓名",
+    //     password: "密码",
+    //     formOfEmployment: "聘用形式",
+    //     correctionTime: "转正日期",
+    //     workNumber: "工号",
+    //     departmentName: "部门",
+    //     staffPhoto: "头像",
+    //   };
+    //   let arr = [];
+    //   // 将表头的英文对应成中文
+    //   this.employeelist.forEach((item) => {
+    //     Object.keys(item).forEach((key) => {
+    //       arr.push(userRelations[key]);
+    //     });
+    //   });
+    //   // console.log(arr);
+    //   return arr;
+    // },
+
+    // 收集员工具体数据----用于导出excel
+    // changeexcel() {
+    //   // 对data数据进行处理
+    //   let newdata = this.employeelist.map((item) => {
+    //     // console.log(item);
+    //     let arr = [];
+    //     Object.keys(item).forEach((key) => {
+    //       // console.log(key);
+    //       arr.push(item[key]);
+    //     });
+    //     return arr;
+    //   });
+    //   // console.log(newdata);
+    //   return newdata;
+    // },
+
+    // excel导出，整理员工数据变为二维数组,并与表头一一对应，返回一个二重数组
+    excelData(headers, data) {
+      // headers 表头的中英对照，data  所有的员工数据
+      return data.map((item) => {
+        // item  每一条员工数据
+        return Object.keys(headers).map((key) => {
+          // key 是中文  headers[key] 是英文
+          // item[headers[key]]  是当前key对应的数据，可以做到导出时hearders与data相对应
+
+          if (
+            headers[key] == "timeOfEntry" ||
+            headers[key] == "correctionTime"
+          ) {
+            // 对时间格式进行处理
+            return formatDate(item[headers[key]]);
+          } else if (headers[key] === "formOfEmployment") {
+            // 对招聘形式做格式化处理
+            let obj = EmployeeEnum.hireType.find(
+              (o) => o.id == item[headers[key]]
+            );
+            return obj ? obj.value : "未知";
+          }
+          return item[headers[key]];
+        });
+      });
+    },
   },
+
   mounted() {
     // 发送请求获取员工列表
     this.getEmployeesList();

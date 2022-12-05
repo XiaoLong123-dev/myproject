@@ -1,8 +1,5 @@
 <template>
-  <div>
-    Hi~
-    <UploadExcel></UploadExcel>
-  </div>
+  <div>Hi~</div>
 </template>
 
 <script>
