@@ -20,7 +20,8 @@ const actions = {
   // 获取用户信息
   async getUserInfo(context, data) {
     let result = await getUserInfoList();
-    // 根据id获取用户的详情
+
+    // 根据id获取用户的详情(包含头像信息)
     let obj = await getUserDetailById(result.data.userId);
 
     if (result.success) {

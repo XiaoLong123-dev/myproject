@@ -18,7 +18,7 @@ export const getUserInfoList = () => {
   });
 };
 
-// 通过id获取用户的基本信息
+// 通过id获取用户的基本信息（包含头像信息）
 export const getUserDetailById = (id) => {
   return request({
     url: `/sys/user/${id}`,

@@ -38,9 +38,15 @@
             </el-form>
           </el-tab-pane>
           <!-- 个人详情 -->
-          <el-tab-pane label="个人详情" name="detail">个人详情</el-tab-pane>
+          <el-tab-pane label="个人详情" name="detail">
+            <!-- 动态组件 -->
+            <component :is="UserComponent"></component>
+          </el-tab-pane>
           <!-- 岗位信息 -->
-          <el-tab-pane label="岗位信息" name="job">岗位信息</el-tab-pane>
+          <el-tab-pane label="岗位信息" name="job">
+            <!-- 放置岗位详情 -->
+            <component :is="JobInfo" />
+          </el-tab-pane>
         </el-tabs>
       </el-card>
     </div>
@@ -50,20 +56,33 @@
 <script>
 import { getUserDetailById } from "@/api/user";
 import { saveUserDetailById } from "@/api/employees";
+// 引入员工详情组件
+import userInfo from "./components/userInfo.vue";
+// 岗位详情
+import jobInfo from "./components/jobInfo.vue";
 export default {
   name: "employeeDetail",
+  components: {
+    userInfo,
+    jobInfo,
+  },
   data() {
     return {
+      // 动态组件
+      UserComponent: "userInfo",
+      JobInfo: "jobInfo",
       activeName: "login",
       //   因为后台返回的密码是加密之后的，不能解密，所以使用newpassword存储最新的密码
       formdata: {
         username: "",
         newpassword: "",
       },
+      // 旧的用户名信息
+      oldusername: "",
       //   表单检验
       rules: {
         username: [
-          { required: true, message: "姓名必填", trigger: "blur" },
+          { required: true, message: "姓名必填", trigger: "change" },
           { min: 1, max: 5, message: "姓名在1-5位之间", trigger: "blur" },
         ],
         newpassword: [
@@ -77,21 +96,35 @@ export default {
     // 表单的重置
     resetForm(formName) {
       // 重置表单数据，需要在 el-form-item 上添加 prop="password"属性，否则不生效
-      this.$refs[formName].resetFields();
+      // this.$refs[formName].resetFields();
+      this.getUserDetail();
     },
 
-    // 店家确定按钮的回调
+    // 确定按钮的回调
     async submitForm(formName) {
-      // 进行表单校验  promise的形式
-      await this.$refs[formName].validate();
-      // 校验成功
-      // 发送保存信息请求
-      //   把新的密码覆盖掉旧的密码并作为参数发送请求
-      await saveUserDetailById({
-        ...this.formdata,
-        password: this.formdata.newpassword,
-      });
-      this.$message.success("修改成功");
+      try {
+        // 进行表单校验  promise的形式
+        await this.$refs[formName].validate();
+        // 校验成功
+        // 发送保存信息请求
+        //   把新的密码覆盖掉旧的密码并作为参数发送请求
+        await saveUserDetailById({
+          ...this.formdata,
+          password: this.formdata.newpassword,
+        });
+        this.$message.success("修改成功");
+        // 如果当前登录的账号和修改的是同一个用户
+        if (this.$store.state.user.userInfo.username == this.oldusername) {
+          // 清空token
+          // 跳转页面
+          this.$store.dispatch("user/loinout");
+          this.$router.push("/login");
+        }
+        // 重置表单
+        this.getUserDetail();
+      } catch (error) {
+        this.$message.error("请填写完整");
+      }
     },
 
     // 根据id获取用户的基本数据
@@ -99,6 +132,8 @@ export default {
       let result = await getUserDetailById(this.$route.params.id);
       if (result.success) {
         this.formdata = result.data;
+        // 保存旧的用户名信息
+        this.oldusername = result.data.username;
       }
     },
   },
