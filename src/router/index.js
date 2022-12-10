@@ -48,13 +48,15 @@ export const constRoutes = [
     meta: { title: "首页", icon: "el-icon-s-platform" },
     children: [
       {
-        path: "home",
+        path: "/home",
         component: Home,
+        name: "home",
         meta: { title: "主页", icon: "el-icon-s-platform" },
       },
       // excel导入
       {
-        path: "import",
+        path: "/import",
+        name: "import",
         component: Import,
         hidden: true,
       },

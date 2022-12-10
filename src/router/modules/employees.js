@@ -7,6 +7,7 @@ export default {
   path: "/employees",
   component: Layout,
   meta: { title: "员工管理", icon: "el-icon-s-platform" },
+  // hidden: true,
   // 配置二级路的路由表
   children: [
     {

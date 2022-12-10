@@ -111,10 +111,11 @@ export default {
   display: flex;
   position: absolute;
   right: 40px;
-  top: 10px;
+  top: 0;
   .demo-type-img {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
     border-radius: 50%;
     cursor: pointer;
     vertical-align: middle;
@@ -125,7 +126,7 @@ export default {
     height: 100%;
   }
   .demo-type-name {
-    margin-top: 12px;
+    margin-top: 18px;
     padding: 0 10px;
   }
 }

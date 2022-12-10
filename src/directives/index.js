@@ -3,6 +3,10 @@
 export const imageerror = {
   // 指令对象,会在当前的dom元素插入到结点之后执行
   inserted(dom, options) {
+    //   图片异常的逻辑
+    //  监听img标签的错误事件  因为图片加载失败 会触发  onerror事件
+    dom.src = dom.src || options.value;
+
     // options是 指令中的变量的解释  其中有一个属性叫value
     // dom 表示当前指令作用的dom对象
     // dom 认为此时就是图片
@@ -14,5 +18,9 @@ export const imageerror = {
       // options.value 默认图片
       dom.src = options.value;
     };
+  },
+  // 指令所在组件的 VNode 及其子 VNode 全部更新后调用。
+  componentUpdated(dom, options) {
+    dom.src = dom.src || options.value;
   },
 };

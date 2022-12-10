@@ -58,6 +58,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
+            <imageUpload ref="staffPhoto"></imageUpload>
           </el-form-item>
         </el-col>
       </el-row>
@@ -88,9 +89,10 @@
         </el-form-item>
         <!-- 个人头像 -->
         <!-- 员工照片 -->
-
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+
+          <imageUpload ref="myStaffPhoto"></imageUpload>
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -471,13 +473,37 @@ export default {
     //  无法获取聘用信息
     async getUserDetailById() {
       let result = await getUserDetailById(this.userId);
+      // console.log(result.data);
 
+      // 设置员工的头像
+      if (result.data.staffPhoto) {
+        // 员工头像
+        // 这里我们赋值，同时需要给赋值的地址一个标记 upload: true
+        this.$refs.staffPhoto.filelist = [
+          { url: result.data.staffPhoto, upload: true },
+        ];
+      }
       this.userInfo = result.data;
     },
+
     // 员工的基本信息的保存更新
     async saveUser() {
-      await saveUserDetailById(this.userInfo);
+      // 获取员工的头像一起保存
+      let filelist = this.$refs.staffPhoto.filelist;
+      // 判断是否上传成功，upload为true是成功
+      if (filelist.some((item) => !item.upload)) {
+        // 上传还没有成功
+        this.$message.error("图片还没上传成功");
+        return;
+      }
+      // 如果上传成功，合并对象
+      await saveUserDetailById({
+        ...this.userInfo,
+        staffPhoto: filelist && filelist.length ? filelist[0].url : "",
+      });
+
       this.$message.success("保存成功");
+
       // js刷新当前文档
       location.reload();
     },
@@ -485,16 +511,38 @@ export default {
     // 获取员工的详细信息
     async getUgetPersonalDetailser() {
       let result = await getPersonalDetail(this.userId);
-
+      console.log(result);
+      //  员工照片
+      if (result.data.staffPhoto) {
+        // 员工照片
+        this.$refs.myStaffPhoto.filelist = [
+          { url: result.data.staffPhoto, upload: true },
+        ];
+      }
       this.formData = result.data;
     },
 
     // 保存员工的详细信息
     async savePersonal() {
-      await updatePersonal(this.formData);
+      // 获取员工的头像一起保存
+      let filelist = this.$refs.myStaffPhoto.filelist;
+      // 判断是否上传成功，upload为true是成功
+      if (filelist.some((item) => !item.upload)) {
+        // 上传还没有成功
+        this.$message.error("图片还没上传成功");
+        return;
+      }
+      // 如果上传成功，合并对象
+      await updatePersonal({
+        ...this.formData,
+        staffPhoto: filelist && filelist.length ? filelist[0].url : "",
+      });
+      // console.log(filelist);
+
+      // await updatePersonal(this.formData);
       this.$message.success("保存成功");
       // js刷新当前文档
-      location.reload();
+      // location.reload();
     },
   },
   mounted() {
