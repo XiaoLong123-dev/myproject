@@ -476,7 +476,7 @@ export default {
       // console.log(result.data);
 
       // 设置员工的头像
-      if (result.data.staffPhoto) {
+      if (result.data.staffPhoto && result.data.staffPhoto.trim()) {
         // 员工头像
         // 这里我们赋值，同时需要给赋值的地址一个标记 upload: true
         this.$refs.staffPhoto.filelist = [
@@ -499,7 +499,7 @@ export default {
       // 如果上传成功，合并对象
       await saveUserDetailById({
         ...this.userInfo,
-        staffPhoto: filelist && filelist.length ? filelist[0].url : "",
+        staffPhoto: filelist && filelist.length ? filelist[0].url : " ",
       });
 
       this.$message.success("保存成功");
@@ -511,14 +511,15 @@ export default {
     // 获取员工的详细信息
     async getUgetPersonalDetailser() {
       let result = await getPersonalDetail(this.userId);
-      console.log(result);
+
       //  员工照片
-      if (result.data.staffPhoto) {
+      if (result.data.staffPhoto && result.data.staffPhoto.trim()) {
         // 员工照片
         this.$refs.myStaffPhoto.filelist = [
           { url: result.data.staffPhoto, upload: true },
         ];
       }
+      // 获取不到信息，为空
       this.formData = result.data;
     },
 
@@ -535,14 +536,15 @@ export default {
       // 如果上传成功，合并对象
       await updatePersonal({
         ...this.formData,
-        staffPhoto: filelist && filelist.length ? filelist[0].url : "",
+        staffPhoto: filelist && filelist.length ? filelist[0].url : " ",
+        userId: this.userId,
       });
       // console.log(filelist);
 
       // await updatePersonal(this.formData);
       this.$message.success("保存成功");
       // js刷新当前文档
-      // location.reload();
+      location.reload();
     },
   },
   mounted() {

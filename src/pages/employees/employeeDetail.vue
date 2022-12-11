@@ -39,11 +39,29 @@
           </el-tab-pane>
           <!-- 个人详情 -->
           <el-tab-pane label="个人详情" name="detail">
+            <!-- 打印按钮 -->
+            <el-row type="flex" justify="end">
+              <el-tooltip content="打印个人基本信息">
+                <router-link
+                  :to="`/print/${this.$route.params.id}?type=personal`"
+                >
+                  <i class="el-icon-printer" />
+                </router-link>
+              </el-tooltip>
+            </el-row>
             <!-- 动态组件 -->
             <component :is="UserComponent"></component>
           </el-tab-pane>
           <!-- 岗位信息 -->
           <el-tab-pane label="岗位信息" name="job">
+            <!-- 打印按钮 -->
+            <el-row type="flex" justify="end">
+              <el-tooltip content="打印岗位信息">
+                <router-link :to="`/print/${this.$route.params.id}?type=job`">
+                  <i class="el-icon-printer" />
+                </router-link>
+              </el-tooltip>
+            </el-row>
             <!-- 放置岗位详情 -->
             <component :is="JobInfo" />
           </el-tab-pane>

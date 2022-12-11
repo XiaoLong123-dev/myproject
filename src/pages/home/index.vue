@@ -1,9 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="app-container">
-      Hi~
-      <imageUpload></imageUpload>
-    </div>
+    <div class="app-container">Hi~</div>
   </div>
 </template>
 

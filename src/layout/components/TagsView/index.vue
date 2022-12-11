@@ -2,7 +2,6 @@
   <div>
     <!-- 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right" class="right-top">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item
         :to="item.path"
         v-for="(item, index) in matcheds"
@@ -14,7 +13,13 @@
     <!-- 头像信息 -->
     <div class="demo-type">
       <div class="demo-type-img">
-        <img v-imageerror="defaultImage" :src="staffPhoto" alt="" srcset="" />
+        <img
+          v-imageerror="defaultImage"
+          :src="staffPhoto"
+          alt=""
+          srcset=""
+          @click="showEr(staffPhoto)"
+        />
       </div>
       <!-- 姓名 -->
       <div class="demo-type-name">Hi~ {{ name }}</div>
@@ -33,11 +38,21 @@
         <el-dropdown-item command="loginout">退出账号</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
+
+    <!-- 弹层组件 -->
+    <!-- 点击头像显示二维码 -->
+    <el-dialog title="二维码" :visible.sync="showDialog" center>
+      <el-row type="flex" justify="center">
+        <canvas ref="myCanvas" />
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+// 引入二维码的包
+import qrcode from "qrcode";
 export default {
   name: "TagsView",
   data() {
@@ -46,6 +61,8 @@ export default {
       matcheds: [],
       // 默认头像
       defaultImage: require("@/assets/common/head.jpg"),
+      // 控制二维码的显示与隐藏
+      showDialog: false,
     };
   },
   computed: {
@@ -79,6 +96,23 @@ export default {
         this.$router.push("/login");
       }
     },
+    // 显示二维码弹层
+    showEr(staffPhoto) {
+      // 如果staffPhoto存在再显示弹层
+      if (staffPhoto) {
+        this.showDialog = true;
+
+        // 页面渲染是异步的，
+        this.$nextTick(() => {
+          // 此时页面结构已经加载完成
+          // 将地址转换为二维码
+          // 如果转换的二维码后面信息 是一个地址的话，就会跳转到该地址 否则就会显示内容
+          qrcode.toCanvas(this.$refs.myCanvas, staffPhoto);
+        });
+      } else {
+        this.$message.error("该用户还未上传头像");
+      }
+    },
   },
   mounted() {
     // console.log(this.defaultImage);
@@ -88,12 +122,12 @@ export default {
     $route: {
       handler() {
         if (this.$route.matched.length > 0) {
-          this.matcheds = this.$route.matched.filter(
-            (item) => item.name && item.name != "首页"
-          );
-          // this.matcheds = this.$route.matched;
+          // this.matcheds = this.$route.matched.filter(
+          //   (item) => item.meta.title && item.meta.title!= "首页"
+          // );
+          this.matcheds = this.$route.matched;
         }
-        console.log(this.matcheds);
+        // console.log(this.$route.matched);
       },
       immediate: true,
       deep: true,

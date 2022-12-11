@@ -21,6 +21,7 @@ export const imageerror = {
   },
   // 指令所在组件的 VNode 及其子 VNode 全部更新后调用。
   componentUpdated(dom, options) {
+    // 初始化组件，一旦更新就会再次进入inserted函数 会进去componentUpdated
     dom.src = dom.src || options.value;
   },
 };

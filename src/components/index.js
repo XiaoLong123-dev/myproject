@@ -3,6 +3,9 @@ import PageTool from "./PageTool";
 import Pagination from "./Pagination";
 import UploadExcel from "./UploadExcel";
 import imageUpload from "./imageUpload";
+// 打印插件
+import Print from "vue-print-nb";
+
 export default {
   // vue.use()的时候会调用里面的install(v)方法,而install方法的参数v就是vue实例
   install(Vue) {
@@ -10,5 +13,6 @@ export default {
     Vue.component("Pagination", Pagination);
     Vue.component("UploadExcel", UploadExcel);
     Vue.component("imageUpload", imageUpload);
+    Vue.use(Print);
   },
 };

@@ -21,11 +21,23 @@ export default {
         icon: "el-icon-s-platform",
       },
     },
-    //
+    // 员工详情
     {
       path: "/employees/:id", // 动态路由参数
       component: () => import("@/pages/employees/employeeDetail.vue"),
       hidden: true,
+      meta: {
+        title: "员工详情",
+      },
+    },
+    // 打印信息
+    {
+      path: "/print/:id?",
+      component: () => import("@/pages/employees/print.vue"),
+      hidden: true,
+      meta: {
+        title: "打印信息",
+      },
     },
   ],
 };
