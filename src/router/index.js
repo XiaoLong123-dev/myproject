@@ -58,6 +58,7 @@ export const constRoutes = [
         path: "/import",
         name: "import",
         component: Import,
+        meta: { title: "excel导入" },
         hidden: true,
       },
     ],

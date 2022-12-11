@@ -56,7 +56,9 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="showRole(row)"
+                >角色</el-button
+              >
               <el-button type="text" size="small" @click="delEmployees(row)"
                 >删除</el-button
               >
@@ -79,6 +81,12 @@
       :isshow.sync="isshow"
       @updateemployees="updateemployees"
     ></addEmployees>
+    <!-- 角色弹层 -->
+    <AssignRole
+      :showDialog.sync="showDialog"
+      :userId="userId"
+      ref="assign"
+    ></AssignRole>
   </div>
 </template>
 
@@ -89,8 +97,9 @@ import { getEmployeesList, delEmployees } from "@/api/employees";
 import addEmployees from "./components/addEmployees.vue";
 // 引入时间处理函数
 import { formatDate } from "@/utils/filters";
+import AssignRole from "./components/assignRole.vue";
 export default {
-  components: { addEmployees },
+  components: { addEmployees, AssignRole },
   data() {
     return {
       // 员工列表
@@ -105,6 +114,10 @@ export default {
       loading: false,
       // 对话框的控制
       isshow: false,
+      // 显示角色的对话框
+      showDialog: false,
+      // 用于记录角色的id
+      userId: "",
     };
   },
   methods: {
@@ -288,6 +301,16 @@ export default {
           return item[headers[key]];
         });
       });
+    },
+
+    // 点击角色，显示角色弹层
+    async showRole(row) {
+      this.userId = row.id;
+      // 调用父组件的方法，获取当用户的角色值
+      // 此时，对话框中的选中状态再切换时会闪烁，让下面的代码先执行，然后再执行显示弹层代码
+      await this.$refs.assign.getUserDetailById(row.id);
+      // 显示弹层
+      this.showDialog = true;
     },
   },
 
