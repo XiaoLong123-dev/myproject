@@ -69,3 +69,15 @@ export const addRoles = (data) => {
     data,
   });
 };
+
+/****
+ * 给角色分配权限
+ * data{id:角色id,permIds:权限id}
+ */
+export function assignPerm(data) {
+  return request({
+    url: "/sys/role/assignPrem",
+    method: "put",
+    data,
+  });
+}

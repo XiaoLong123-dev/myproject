@@ -42,7 +42,12 @@
                 <!-- 作用域插槽，可以获取每行的数据 -->
                 <!-- 通过 Scoped slot 可以获取到 row, column, $index 和 store（table 内部的状态管理）的数据 -->
                 <template slot-scope="scope">
-                  <el-button type="success" size="medium">分配权限</el-button>
+                  <el-button
+                    type="success"
+                    size="medium"
+                    @click="assignPerm(scope.row)"
+                    >分配权限</el-button
+                  >
                   <el-button
                     type="primary"
                     size="small"
@@ -107,18 +112,53 @@
         </el-tabs>
       </el-card>
     </div>
-    <!-- 对话框组件 -->
+    <!-- 新增编辑的对话框组件 -->
     <roleDialog
       v-bind:showdialog.sync="showdialog"
       :roleDetail="roleDetail"
       @updateData="getRoleList(page)"
     ></roleDialog>
+    <!-- 分配权限的对话框 -->
+    <el-dialog
+      title="分配权限"
+      :visible.sync="showdialog2"
+      :before-close="handlerClose"
+    >
+      <!-- 权限是一棵树 -->
+      <!-- 
+          :default-expand-all 是否默认全部展开
+          :show-checkbox="true" 是否可选中节点
+          :check-strictly="true" 如果为true 那表示父子勾选时  不互相关联 如果为false就互相关联
+          :default-checked-keys="selectCheck"  默认勾选的节点的 key 的数组
+          node-key="id" 每个树节点用来作为唯一标识的属性，整棵树应该是唯一的
+       -->
+      <el-tree
+        :data="perdata"
+        :props="defaultprops"
+        :default-expand-all="true"
+        :show-checkbox="true"
+        :check-strictly="true"
+        :default-checked-keys="selectCheck"
+        node-key="id"
+      ></el-tree>
+      <el-row type="flex" slot="footer" justify="center">
+        <el-col :span="6">
+          <el-button type="primary" size="small" @click="submit"
+            >确定</el-button
+          >
+          <el-button size="small" @click="cancel">取消</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import roleDialog from "./components/roleDialog.vue";
 import { getRoleList, deleteRoleById, getroleDetail } from "@/api/setting";
+import { getPermissionList, getPermissionDetail } from "@/api/permission";
+// 引入转换树形结构的方法
+import { tranListToTree } from "@/utils";
 export default {
   name: "Setting",
   components: {
@@ -151,6 +191,18 @@ export default {
         email: "",
         remark: "",
       },
+      // 控制分配权限的显示与隐藏
+      showdialog2: false,
+      // 权限数据
+      perdata: [],
+      // 定义显示字段的名称和子属性的字段名称
+      defaultprops: {
+        label: "name",
+      },
+      // 记录用户id
+      roleid: "",
+      // 默认勾选的节点的 key 的数组
+      selectCheck: [],
     };
   },
   methods: {
@@ -203,6 +255,33 @@ export default {
     addRole() {
       // 显示对话框
       this.showdialog = true;
+    },
+
+    // 分配权限
+    async assignPerm(row) {
+      // 获取权限点
+      let result = await getPermissionList();
+      // 转化为树形结构
+      this.perdata = tranListToTree(result.data, "0");
+      // 记录当前角色的id
+      this.roleid = row.id;
+      console.log(row.id);
+      // 获取当前角色的权限点
+      // let result2 = await getPermissionDetail("604e2aeb488be61b90b68776");
+      // console.log(result2);
+      this.showdialog2 = true;
+    },
+    // 分配权限对话框关闭前的回调
+    handlerClose() {
+      this.showdialog2 = false;
+    },
+    // 分配权限对话框确认按钮
+    submit() {
+      this.handlerClose();
+    },
+    // 分配权限对话框取消按钮
+    cancel() {
+      this.handlerClose();
     },
   },
   mounted() {

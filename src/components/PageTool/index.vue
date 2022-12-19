@@ -40,7 +40,7 @@ export default {
 
 <style lang="less" scoped>
 .pagetool {
-  margin: 10px;
+  margin: 10px 0;
   .before {
     padding: 0 15px;
     line-height: 34px;
