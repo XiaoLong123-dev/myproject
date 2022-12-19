@@ -133,6 +133,7 @@
           node-key="id" 每个树节点用来作为唯一标识的属性，整棵树应该是唯一的
        -->
       <el-tree
+        ref="permTree"
         :data="perdata"
         :props="defaultprops"
         :default-expand-all="true"
@@ -155,8 +156,13 @@
 
 <script>
 import roleDialog from "./components/roleDialog.vue";
-import { getRoleList, deleteRoleById, getroleDetail } from "@/api/setting";
-import { getPermissionList, getPermissionDetail } from "@/api/permission";
+import {
+  getRoleList,
+  deleteRoleById,
+  getroleDetail,
+  assignPerm,
+} from "@/api/setting";
+import { getPermissionList } from "@/api/permission";
 // 引入转换树形结构的方法
 import { tranListToTree } from "@/utils";
 export default {
@@ -265,18 +271,29 @@ export default {
       this.perdata = tranListToTree(result.data, "0");
       // 记录当前角色的id
       this.roleid = row.id;
-      console.log(row.id);
       // 获取当前角色的权限点
-      // let result2 = await getPermissionDetail("604e2aeb488be61b90b68776");
-      // console.log(result2);
+      let result2 = await getroleDetail(this.roleid);
+      // 将该角色对应的权限点显示出来
+      this.selectCheck = result2.data.permIds;
+
+      // 开启对话框
       this.showdialog2 = true;
     },
     // 分配权限对话框关闭前的回调
     handlerClose() {
+      this.selectCheck = []; // 重置数据
       this.showdialog2 = false;
     },
     // 分配权限对话框确认按钮
-    submit() {
+    async submit() {
+      // 若节点可被选择（即 show-checkbox 为 true），则返回目前被选中的节点的 key 所组成的数组 与node-key="id"配合即可获取选中的权限id
+      // console.log(this.$refs.permTree.getCheckedKeys());
+      // 收集数据发送请求
+      await assignPerm({
+        permIds: this.$refs.permTree.getCheckedKeys(),
+        id: this.roleid,
+      });
+      this.$message.success("分配权限成功");
       this.handlerClose();
     },
     // 分配权限对话框取消按钮

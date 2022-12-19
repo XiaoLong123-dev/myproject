@@ -6,6 +6,7 @@ import Layout from "@/layout/Layout.vue";
 export default {
   path: "/departments",
   component: Layout,
+  // name: "departments",
   meta: { title: "架构管理", icon: "el-icon-s-platform" },
   // 配置二级路的路由表
   children: [

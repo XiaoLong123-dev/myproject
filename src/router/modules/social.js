@@ -6,12 +6,13 @@ export default {
   path: "/social",
   // name: "social", // 给路由规则加一个name，权限管理需要用
   component: Layout,
+  // name: "social_securitys",
   meta: { title: "社保管理", icon: "el-icon-s-platform" },
   // 配置二级路的路由表
   children: [
     {
       path: "/social", // 这里当二级路由的path什么都不写的时候 表示该路由为当前二级路由的默认路由
-      name: "social", // 给路由规则加一个name，权限管理需要用
+      name: "social_securitys", // 给路由规则加一个name，权限管理需要用
       component: () => import("@/pages/social"),
       // 路由元信息  其实就是存储数据的对象 我们可以在这里放置一些信息
       meta: {

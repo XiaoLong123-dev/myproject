@@ -59,6 +59,7 @@
 <script>
 import SideBar from "@/layout/components/SideBar/SideBar.vue";
 import TagsView from "@/layout/components/TagsView";
+import { mapGetters } from "vuex";
 export default {
   name: "Layout",
   components: { SideBar, TagsView },
@@ -70,17 +71,17 @@ export default {
       part: 4,
 
       // 所有路由表
-      routes: [],
+      // routes: [],
 
       // 路由动画
       transitionName: "slide-right",
     };
   },
 
-  created() {
-    this.getRoutes();
+  computed: {
+    // 获取每个用户的权限路由
+    ...mapGetters(["routes"]),
   },
-  mounted() {},
 
   methods: {
     hideOrDisplay() {
@@ -91,11 +92,6 @@ export default {
         this.isCollapse = true;
         this.part = 0;
       }
-    },
-    getRoutes() {
-      // 获取所有路由表
-      this.routes = this.$router.options.routes;
-      // console.log(this.$router.options.routes);
     },
   },
 

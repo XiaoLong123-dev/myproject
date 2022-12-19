@@ -35,11 +35,11 @@ export const constRoutes = [
     hidden: true,
   },
   // 匹配不到的时候
-  {
-    path: "*",
-    redirect: "/404",
-    hidden: true,
-  },
+  // {
+  //   path: "*",
+  //   redirect: "/404",
+  //   hidden: true,
+  // },
 
   {
     path: "/",
@@ -83,15 +83,20 @@ const createRouter = () =>
     // 管理滚动行为 如果出现滚动 切换就让 让页面回到顶部
     scrollBehavior: () => ({ y: 0 }),
     // 临时合并静态路由和动态路由
-    routes: [...constRoutes, ...asyncRouter],
+    // routes: [...constRoutes, ...asyncRouter],
+    routes: [...constRoutes],
+
     // routes: constRoutes,
   });
 
 const router = createRouter();
 
-// export function resetRouter() {
-//   const newRouter = createRouter();
-//   router.matcher = newRouter.matcher;
-// }
+// 重置路由
+// 在做添加动态路由的时候，并没有在登出时清空所添加的路由，所以我们需要重置路由
+export function resetRouter() {
+  const newRouter = createRouter();
+  // 重新设置路由的可匹配路径;
+  router.matcher = newRouter.matcher;
+}
 
 export default router;

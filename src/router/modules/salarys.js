@@ -6,6 +6,7 @@ import Layout from "@/layout/Layout.vue";
 export default {
   path: "/salarys",
   component: Layout,
+  // name: "salarys",
   meta: { title: "工资管理", icon: "el-icon-s-platform" },
   // 配置二级路的路由表
   children: [
