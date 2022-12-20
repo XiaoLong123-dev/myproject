@@ -59,7 +59,7 @@
               <el-button type="text" size="small" @click="showRole(row)"
                 >角色</el-button
               >
-              <el-button type="text" size="small" @click="delEmployees(row)"
+              <el-button :disabled="!checkPermision('DELETE-EMPLOYEES')" type="text" size="small" @click="delEmployees(row)"
                 >删除</el-button
               >
             </template>

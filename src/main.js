@@ -5,6 +5,11 @@ import App from "./App.vue";
 import "./style/first.css";
 import "./style/index.scss";
 
+// 引入mixin
+import checkPermision from '@/minxin/checkPermision'
+// 检验是否拥有删除用户的权限
+Vue.mixin(checkPermision);
+
 // 引入element-ui
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
