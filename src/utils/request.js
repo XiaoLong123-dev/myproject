@@ -49,8 +49,13 @@ service.interceptors.response.use(
       return { success, data, message };
     } else {
       // 执行失败
-      Message.error(message);
-      return Promise.reject(new Error(message));
+      if (message) {
+        Message.error(message);
+        return Promise.reject(new Error(message));
+      } else {
+        Message.error("请求数据失败");
+        return Promise.reject(new Error("请求数据失败"));
+      }
     }
   },
   (err) => {

@@ -32,7 +32,6 @@ router.beforeEach(async (to, form, next) => {
       if (!store.getters.userId) {
         let result = await store.dispatch("user/getUserInfo");
         // 这里可以拿到用户的路由权限信息
-        console.log(result);
         // 筛选用户的可用路由
         // actions中函数 默认是Promise对象 调用这个对象 想要获取返回的值话 必须 加 await或者是then
         // actions是做异步操作的
@@ -58,7 +57,6 @@ router.beforeEach(async (to, form, next) => {
         }
         // router.addRoute(...routes);
 
-        console.log(to.path);
         // routes就是筛选得到的动态路由
         // 动态路由 添加到 路由表中 默认的路由表 只有静态路由 没有动态路由
         // addRoutes  必须 用 next(地址) 不能用next()

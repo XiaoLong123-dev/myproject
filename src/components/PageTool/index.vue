@@ -7,7 +7,7 @@
           <!-- 图标 -->
           <i class="el-icon-info" style="color: blue"></i>
           <!-- 具名插槽 -->
-          <slot name="before">adad</slot>
+          <slot name="before"></slot>
         </div>
       </el-col>
       <el-col>
