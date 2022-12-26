@@ -6,7 +6,7 @@ import Layout from "@/layout/Layout.vue";
 export default {
   path: "/permission",
   component: Layout,
-  // name: "permissions",
+  name: "permissions",
   meta: { title: "权限管理", icon: "el-icon-s-platform" },
   // 配置二级路的路由表
   children: [

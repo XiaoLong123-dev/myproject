@@ -79,6 +79,19 @@
                         </div>
                       </div>
                     </li>
+                    <li>
+                      <div class="item">
+                        <img
+                          v-imageerror="defaultImg"
+                          :src="$store.state.user.userInfo.staffPhoto"
+                          alt=""
+                        />
+                        <div class="message">
+                          <p>xxx 发布了啦啦啦啦啦啦啦啦啦啦啦</p>
+                          <p>2022-12-20 18:00</p>
+                        </div>
+                      </div>
+                    </li>
                   </ul>
                 </el-card>
               </div>
@@ -362,6 +375,22 @@ export default {
 
     .sidelink {
       padding: 5px 0;
+      text-align: center;
+      .icon {
+        display: inline-block;
+        width: 76px;
+        height: 76px;
+        background: url("./../../assets/common/icon.png") no-repeat;
+      }
+      .iconGuide {
+        background-position: 0 0;
+      }
+      .iconHelp {
+        background-position: -224px 0;
+      }
+      .iconTechnology {
+        background-position: -460px 0;
+      }
     }
   }
 }

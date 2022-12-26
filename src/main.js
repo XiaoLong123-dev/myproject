@@ -5,8 +5,19 @@ import App from "./App.vue";
 import "./style/first.css";
 import "./style/index.scss";
 
+// 引入多语言
+import i18n from "@/lang";
+// 动态决定使用那个语言包
+Vue.use(ElementUI, {
+  // elementui本身支持i18n的处理
+  // i18n此时会根据当前的locale属性去寻找对应的显示内容
+  i18n: (key, value) => i18n.t(key),
+  // t方法  会去对应的语言包里寻找对应的内容
+  // 再改变locale里的内容，就会改变对应的当前语言
+});
+
 // 引入mixin
-import checkPermision from '@/minxin/checkPermision'
+import checkPermision from "@/minxin/checkPermision";
 // 检验是否拥有删除用户的权限
 Vue.mixin(checkPermision);
 
@@ -47,4 +58,5 @@ new Vue({
   render: (h) => h(App),
   router,
   store,
+  i18n,
 }).$mount("#app");

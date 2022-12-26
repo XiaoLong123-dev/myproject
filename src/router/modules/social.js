@@ -6,7 +6,7 @@ export default {
   path: "/social",
   // name: "social", // 给路由规则加一个name，权限管理需要用
   component: Layout,
-  // name: "social_securitys",
+  name: "social_securitys",
   meta: { title: "社保管理", icon: "el-icon-s-platform" },
   // 配置二级路的路由表
   children: [

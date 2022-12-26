@@ -6,7 +6,7 @@ import Layout from "@/layout/Layout.vue";
 export default {
   path: "/attendances",
   component: Layout,
-  // name: "attendances",
+  name: "attendances",
   meta: { title: "考勤管理", icon: "el-icon-s-platform" },
   // 配置二级路的路由表
   children: [

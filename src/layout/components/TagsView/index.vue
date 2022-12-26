@@ -10,6 +10,12 @@
       >
     </el-breadcrumb>
 
+    <!-- 全屏 -->
+    <div class="screenfull" @click="changeScreen">
+      <i class="el-icon-monitor"></i>
+    </div>
+    <!-- 切换语言组件 -->
+    <div class="changelanguage"><ChangeLanguage /></div>
     <!-- 头像信息 -->
     <div class="demo-type">
       <div class="demo-type-img">
@@ -50,6 +56,7 @@
 </template>
 
 <script>
+import screenfull from "screenfull";
 import { mapActions, mapGetters } from "vuex";
 // 引入二维码的包
 import qrcode from "qrcode";
@@ -113,6 +120,15 @@ export default {
         this.$message.error("该用户还未上传头像");
       }
     },
+    // 改变全屏
+    changeScreen() {
+      if (!screenfull.isEnabled) {
+        this.$message.warning("全屏组件不可用");
+        return;
+      }
+      // 全屏组件可用
+      screenfull.toggle();
+    },
   },
   mounted() {
     // console.log(this.defaultImage);
@@ -140,6 +156,20 @@ export default {
   line-height: 8vh;
   text-align: center;
   padding-left: 50px;
+}
+.screenfull {
+  position: absolute;
+  right: 200px;
+  top: 0;
+  cursor: pointer;
+  font-size: 24px;
+  color: white;
+}
+.changelanguage {
+  position: absolute;
+  right: 240px;
+  top: 0;
+  cursor: pointer;
 }
 .demo-type {
   display: flex;

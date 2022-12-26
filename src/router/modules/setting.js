@@ -6,7 +6,7 @@ import Layout from "@/layout/Layout.vue";
 export default {
   path: "/setting",
   component: Layout,
-  // name: "settings",
+  name: "settings",
   meta: { title: "设置管理", icon: "el-icon-s-platform" },
   // 配置二级路的路由表
   children: [

@@ -6,7 +6,7 @@ import Layout from "@/layout/Layout.vue";
 export default {
   path: "/approvals",
   component: Layout,
-  // name: "approvals",
+  name: "approvals",
   meta: { title: "审批管理", icon: "el-icon-s-platform" },
   // 配置二级路的路由表
   children: [

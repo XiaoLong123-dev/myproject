@@ -9,14 +9,19 @@
         <el-submenu :index="item.path" v-if="item.children">
           <template slot="title">
             <i :class="item.meta.icon || ''"></i>
-            <span>{{ item.meta.title }}</span>
+            <!-- <span>{{ item.meta.title }}</span> -->
+            <!--全局挂载i18n之后 每个组件都会有一个$t方法 $t(key)会返回当前语言模式下的语言包显示的内容 -->
+            <!-- $t()可以传入带点的字符串 表示查询嵌套结构的值 -->
+            <!-- name必须和路由组件 -->
+            <span>{{ $t("route." + item.name) }}</span>
           </template>
           <SideBar :tree="item.children"></SideBar>
         </el-submenu>
 
         <el-menu-item :index="item.path" v-if="!item.children">
           <i :class="item.meta.icon || ''"></i>
-          <span slot="title"> {{ item.meta.title }}</span>
+          <!-- <span slot="title"> {{ item.meta.title }}</span> -->
+          <span slot="title">{{ $t("route." + item.name) }}</span>
         </el-menu-item>
       </div>
     </div>
